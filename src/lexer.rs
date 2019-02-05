@@ -26,8 +26,30 @@ impl<'l> Lexer<'l> {
         self.position = self.read_position;
         self.read_position = self.read_position + 1;
     }
+
+    // fn token(&mut self) -> super::token::Token {
+    //     let token: super::token::Token;
+
+    //     self.skip_whitespace();
+
+    //     match self.ch {
+    //         '=' => {}
+    //         _ => {}
+    //     };
+
+    //     token
+    // }
+
+    fn skip_whitespace(&mut self) {
+        while self.ch == ' ' || self.ch == '\t' || self.ch == '\n' || self.ch == '\r' {
+            self.read_char()
+        }
+    }
 }
 
+fn is_letter(ch: char) -> bool {
+    'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
+}
 #[test]
 fn test_read_char() {
     let mut l = Lexer::new("abcde");
