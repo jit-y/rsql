@@ -20,9 +20,9 @@ impl fmt::Display for TokenType {
     }
 }
 
-pub fn keyword(key: &str) -> Result<TokenType, &str> {
+pub fn keyword(key: &str) -> Result<TokenType, failure::Error> {
     match key {
         "create" => Ok(TokenType::CREATE),
-        _ => Err("not implemented"),
+        _ => Err(failure::err_msg("not implemented")),
     }
 }
