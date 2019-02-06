@@ -10,12 +10,16 @@ struct Lexer<'l> {
 
 impl<'l> Lexer<'l> {
     fn new(input: &'l str) -> Self {
-        Lexer {
+        let mut lexer = Lexer {
             input: input.as_bytes(),
             position: 0,
             read_position: 0,
             ch: b'0',
-        }
+        };
+
+        lexer.read_char();
+
+        lexer
     }
 
     fn read_char(&mut self) {
@@ -76,4 +80,10 @@ fn test_read_char() {
     l.read_char();
 
     assert_eq!(l.ch, b'e')
+}
+#[test]
+fn test_token() {
+    let mut l = Lexer::new("create");
+
+    assert_eq!(l.token().unwrap().literal, "create");
 }

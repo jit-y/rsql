@@ -21,8 +21,8 @@ impl fmt::Display for TokenType {
 }
 
 pub fn keyword(key: &str) -> Result<TokenType, failure::Error> {
-    match key {
+    match key.to_lowercase().as_str() {
         "create" => Ok(TokenType::CREATE),
-        _ => Err(failure::err_msg("not implemented")),
+        _ => Err(failure::err_msg(key.to_string())),
     }
 }
