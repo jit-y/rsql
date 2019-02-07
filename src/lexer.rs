@@ -38,7 +38,7 @@ impl<'l> Lexer<'l> {
         match self.ch {
             _ => {
                 let literal = self.read_identifier()?;
-                let token_type: TokenType = token::keyword(literal.as_str())?;
+                let token_type: TokenType = token::keyword(literal.as_str());
 
                 let token = Token {
                     literal: literal,
