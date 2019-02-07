@@ -81,9 +81,17 @@ fn test_read_char() {
 
     assert_eq!(l.ch, b'e')
 }
-#[test]
-fn test_token() {
-    let mut l = Lexer::new("create");
 
-    assert_eq!(l.token().unwrap().literal, "create");
+#[cfg(test)]
+mod tests {
+    use super::Lexer;
+
+    #[test]
+    fn test_token() {
+        let mut l = Lexer::new("create table");
+
+        assert_eq!(l.token().unwrap().literal, "create");
+        assert_eq!(l.token().unwrap().literal, "table");
+    }
+
 }
