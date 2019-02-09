@@ -105,18 +105,37 @@ mod tests {
     use super::token::TokenType;
     use super::Lexer;
 
+    struct Test {
+        expected_type: TokenType,
+        expected_literal: String,
+    }
+
     #[test]
     fn test_token() {
         let mut l = Lexer::new("create table database_name.table_name();");
 
-        assert_eq!(l.token().unwrap().token_type, TokenType::CREATE);
-        assert_eq!(l.token().unwrap().token_type, TokenType::TABLE);
-        assert_eq!(l.token().unwrap().token_type, TokenType::IDENT);
-        assert_eq!(l.token().unwrap().token_type, TokenType::COMMA);
-        assert_eq!(l.token().unwrap().token_type, TokenType::IDENT);
-        assert_eq!(l.token().unwrap().token_type, TokenType::LPAREN);
-        assert_eq!(l.token().unwrap().token_type, TokenType::RPAREN);
-        assert_eq!(l.token().unwrap().token_type, TokenType::SEMICOLON);
+        let tests = vec![
+            create_test(TokenType::CREATE, "create"),
+            create_test(TokenType::TABLE, "table"),
+            create_test(TokenType::IDENT, "database_name"),
+            create_test(TokenType::COMMA, "."),
+            create_test(TokenType::IDENT, "table_name"),
+            create_test(TokenType::LPAREN, "("),
+            create_test(TokenType::RPAREN, ")"),
+            create_test(TokenType::SEMICOLON, ";"),
+        ];
+
+        for test in tests.iter() {
+            let tok = l.token().expect("error");
+            assert_eq!(tok.literal, test.expected_literal);
+            assert_eq!(tok.token_type, test.expected_type);
+        }
     }
 
+    fn create_test(token_type: TokenType, literal: &str) -> Test {
+        Test {
+            expected_type: token_type,
+            expected_literal: literal.to_string(),
+        }
+    }
 }

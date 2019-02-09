@@ -28,7 +28,7 @@ impl fmt::Display for TokenType {
             TokenType::LPAREN => "(",
             TokenType::RPAREN => ")",
             TokenType::SEMICOLON => ";",
-            TokenType::COMMA => ",",
+            TokenType::COMMA => ".",
         };
 
         write!(f, "{}", token)
