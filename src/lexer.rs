@@ -41,8 +41,8 @@ impl<'l> Lexer<'l> {
             b';' => new_token(TokenType::SEMICOLON),
             b'.' => new_token(TokenType::COMMA),
             _ => {
-                let literal = self.read_identifier()?;
-                let token_type: TokenType = token::keyword(literal.as_str());
+                let literal = self.read_identifier()?.to_lowercase();
+                let token_type: TokenType = token::keyword(&literal);
 
                 let tok = Token {
                     literal: literal,
@@ -112,7 +112,7 @@ mod tests {
 
     #[test]
     fn test_token() {
-        let mut l = Lexer::new("create table database_name.table_name();");
+        let mut l = Lexer::new("CREATE TABLE database_name.table_name();");
 
         let tests = vec![
             create_test(TokenType::CREATE, "create"),

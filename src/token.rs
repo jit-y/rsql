@@ -36,7 +36,7 @@ impl fmt::Display for TokenType {
 }
 
 pub fn keyword(key: &str) -> TokenType {
-    match key.to_lowercase().as_str() {
+    match key {
         "create" => TokenType::CREATE,
         "table" => TokenType::TABLE,
         _ => TokenType::IDENT,
