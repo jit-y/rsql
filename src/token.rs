@@ -15,6 +15,7 @@ pub enum TokenType {
     LPAREN,
     RPAREN,
     SEMICOLON,
+    COMMA,
 }
 
 impl fmt::Display for TokenType {
@@ -27,6 +28,7 @@ impl fmt::Display for TokenType {
             TokenType::LPAREN => "(",
             TokenType::RPAREN => ")",
             TokenType::SEMICOLON => ";",
+            TokenType::COMMA => ",",
         };
 
         write!(f, "{}", token)

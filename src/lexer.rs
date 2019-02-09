@@ -36,9 +36,10 @@ impl<'l> Lexer<'l> {
         self.skip_whitespace();
 
         let token = match self.ch {
-            b'(' => new_token(TokenType::LPAREN, self.ch),
-            b')' => new_token(TokenType::RPAREN, self.ch),
-            b';' => new_token(TokenType::SEMICOLON, self.ch),
+            b'(' => new_token(TokenType::LPAREN),
+            b')' => new_token(TokenType::RPAREN),
+            b';' => new_token(TokenType::SEMICOLON),
+            b'.' => new_token(TokenType::COMMA),
             _ => {
                 let literal = self.read_identifier()?;
                 let token_type: TokenType = token::keyword(literal.as_str());
@@ -81,10 +82,12 @@ fn is_letter(ch: u8) -> bool {
     (b'a' <= ch && ch <= b'z' || b'A' <= ch && ch <= b'Z' || ch == b'_')
 }
 
-fn new_token(token_type: token::TokenType, literal: u8) -> Token {
+fn new_token(token_type: token::TokenType) -> Token {
+    let literal = format!("{}", token_type);
+
     Token {
         token_type: token_type,
-        literal: literal.to_string(),
+        literal: literal,
     }
 }
 
@@ -104,10 +107,12 @@ mod tests {
 
     #[test]
     fn test_token() {
-        let mut l = Lexer::new("create table foo();");
+        let mut l = Lexer::new("create table database_name.table_name();");
 
         assert_eq!(l.token().unwrap().token_type, TokenType::CREATE);
         assert_eq!(l.token().unwrap().token_type, TokenType::TABLE);
+        assert_eq!(l.token().unwrap().token_type, TokenType::IDENT);
+        assert_eq!(l.token().unwrap().token_type, TokenType::COMMA);
         assert_eq!(l.token().unwrap().token_type, TokenType::IDENT);
         assert_eq!(l.token().unwrap().token_type, TokenType::LPAREN);
         assert_eq!(l.token().unwrap().token_type, TokenType::RPAREN);
