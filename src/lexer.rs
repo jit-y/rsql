@@ -35,19 +35,26 @@ impl<'l> Lexer<'l> {
     fn token(&mut self) -> Result<Token, failure::Error> {
         self.skip_whitespace();
 
-        match self.ch {
+        let token = match self.ch {
+            b'(' => new_token(TokenType::LPAREN, self.ch),
+            b')' => new_token(TokenType::RPAREN, self.ch),
+            b';' => new_token(TokenType::SEMICOLON, self.ch),
             _ => {
                 let literal = self.read_identifier()?;
                 let token_type: TokenType = token::keyword(literal.as_str());
 
-                let token = Token {
+                let tok = Token {
                     literal: literal,
                     token_type: token_type,
                 };
 
-                return Ok(token);
+                return Ok(tok);
             }
         };
+
+        self.read_char();
+
+        Ok(token)
     }
 
     fn read_identifier(&mut self) -> Result<String, failure::Error> {
@@ -71,8 +78,16 @@ impl<'l> Lexer<'l> {
 }
 
 fn is_letter(ch: u8) -> bool {
-    b'a' <= ch && ch <= b'z' || b'A' <= ch && ch <= b'Z' || ch == b'_'
+    (b'a' <= ch && ch <= b'z' || b'A' <= ch && ch <= b'Z' || ch == b'_')
 }
+
+fn new_token(token_type: token::TokenType, literal: u8) -> Token {
+    Token {
+        token_type: token_type,
+        literal: literal.to_string(),
+    }
+}
+
 #[test]
 fn test_read_char() {
     let mut l = Lexer::new("abcde");
@@ -84,14 +99,19 @@ fn test_read_char() {
 
 #[cfg(test)]
 mod tests {
+    use super::token::TokenType;
     use super::Lexer;
 
     #[test]
     fn test_token() {
-        let mut l = Lexer::new("create table");
+        let mut l = Lexer::new("create table foo();");
 
-        assert_eq!(l.token().unwrap().literal, "create");
-        assert_eq!(l.token().unwrap().literal, "table");
+        assert_eq!(l.token().unwrap().token_type, TokenType::CREATE);
+        assert_eq!(l.token().unwrap().token_type, TokenType::TABLE);
+        assert_eq!(l.token().unwrap().token_type, TokenType::IDENT);
+        assert_eq!(l.token().unwrap().token_type, TokenType::LPAREN);
+        assert_eq!(l.token().unwrap().token_type, TokenType::RPAREN);
+        assert_eq!(l.token().unwrap().token_type, TokenType::SEMICOLON);
     }
 
 }

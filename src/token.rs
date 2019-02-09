@@ -12,6 +12,8 @@ pub enum TokenType {
 
     IDENT,
 
+    LPAREN,
+    RPAREN,
     SEMICOLON,
 }
 
@@ -21,6 +23,9 @@ impl fmt::Display for TokenType {
             TokenType::CREATE => "CREATE",
             TokenType::TABLE => "TABLE",
             TokenType::IDENT => "IDENT",
+
+            TokenType::LPAREN => "(",
+            TokenType::RPAREN => ")",
             TokenType::SEMICOLON => ";",
         };
 
