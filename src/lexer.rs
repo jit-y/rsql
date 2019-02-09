@@ -36,10 +36,11 @@ impl<'l> Lexer<'l> {
         self.skip_whitespace();
 
         let token = match self.ch {
-            b'(' => new_token(TokenType::LPAREN),
-            b')' => new_token(TokenType::RPAREN),
-            b';' => new_token(TokenType::SEMICOLON),
-            b'.' => new_token(TokenType::COMMA),
+            b'(' => new_token(TokenType::LParen),
+            b')' => new_token(TokenType::RParan),
+            b';' => new_token(TokenType::SemiColon),
+            b'.' => new_token(TokenType::Comma),
+            b'`' => new_token(TokenType::BackQuote),
             _ => {
                 let literal = self.read_identifier()?.to_lowercase();
                 let token_type: TokenType = token::keyword(&literal);
@@ -112,17 +113,21 @@ mod tests {
 
     #[test]
     fn test_token() {
-        let mut l = Lexer::new("CREATE TABLE database_name.table_name();");
+        let mut l = Lexer::new("CREATE TABLE database_name.table_name(`foo` INT);");
 
         let tests = vec![
-            create_test(TokenType::CREATE, "create"),
-            create_test(TokenType::TABLE, "table"),
-            create_test(TokenType::IDENT, "database_name"),
-            create_test(TokenType::COMMA, "."),
-            create_test(TokenType::IDENT, "table_name"),
-            create_test(TokenType::LPAREN, "("),
-            create_test(TokenType::RPAREN, ")"),
-            create_test(TokenType::SEMICOLON, ";"),
+            create_test(TokenType::Create, "create"),
+            create_test(TokenType::Table, "table"),
+            create_test(TokenType::Ident, "database_name"),
+            create_test(TokenType::Comma, "."),
+            create_test(TokenType::Ident, "table_name"),
+            create_test(TokenType::LParen, "("),
+            create_test(TokenType::BackQuote, "`"),
+            create_test(TokenType::Ident, "foo"),
+            create_test(TokenType::BackQuote, "`"),
+            create_test(TokenType::Int, "int"),
+            create_test(TokenType::RParan, ")"),
+            create_test(TokenType::SemiColon, ";"),
         ];
 
         for test in tests.iter() {

@@ -7,28 +7,34 @@ pub struct Token {
 
 #[derive(Debug, PartialEq)]
 pub enum TokenType {
-    CREATE,
-    TABLE,
+    Create,
+    Table,
 
-    IDENT,
+    Ident,
 
-    LPAREN,
-    RPAREN,
-    SEMICOLON,
-    COMMA,
+    LParen,
+    RParan,
+    SemiColon,
+    Comma,
+    BackQuote,
+
+    Int,
 }
 
 impl fmt::Display for TokenType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let token: &str = match *self {
-            TokenType::CREATE => "CREATE",
-            TokenType::TABLE => "TABLE",
-            TokenType::IDENT => "IDENT",
+            TokenType::Create => "CREATE",
+            TokenType::Table => "TABLE",
+            TokenType::Ident => "IDENT",
 
-            TokenType::LPAREN => "(",
-            TokenType::RPAREN => ")",
-            TokenType::SEMICOLON => ";",
-            TokenType::COMMA => ".",
+            TokenType::LParen => "(",
+            TokenType::RParan => ")",
+            TokenType::SemiColon => ";",
+            TokenType::Comma => ".",
+            TokenType::BackQuote => "`",
+
+            TokenType::Int => "INT",
         };
 
         write!(f, "{}", token)
@@ -37,8 +43,10 @@ impl fmt::Display for TokenType {
 
 pub fn keyword(key: &str) -> TokenType {
     match key {
-        "create" => TokenType::CREATE,
-        "table" => TokenType::TABLE,
-        _ => TokenType::IDENT,
+        "create" => TokenType::Create,
+        "table" => TokenType::Table,
+
+        "int" => TokenType::Int,
+        _ => TokenType::Ident,
     }
 }

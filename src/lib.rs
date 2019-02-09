@@ -7,7 +7,7 @@ mod tests {
     fn it_works() {
         assert_eq!(
             super::token::keyword("create"),
-            super::token::TokenType::CREATE
+            super::token::TokenType::Create
         );
     }
 }
