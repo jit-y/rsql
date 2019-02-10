@@ -113,7 +113,11 @@ mod tests {
 
     #[test]
     fn test_token() {
-        let mut l = Lexer::new("CREATE TABLE database_name.table_name(`foo` INT);");
+        let mut l = Lexer::new(
+            r#"
+CREATE TABLE database_name.table_name(`foo` INT);
+"#,
+        );
 
         let tests = vec![
             create_test(TokenType::Create, "create"),
